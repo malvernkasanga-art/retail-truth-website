@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="The Retail Truth">
+  <defs>
+    <radialGradient id="rt-bg" cx="50%" cy="38%" r="70%">
+      <stop offset="0" stop-color="#1b1f33"/>
+      <stop offset=".55" stop-color="#0b1226"/>
+      <stop offset="1" stop-color="#060b1a"/>
+    </radialGradient>
+    <radialGradient id="rt-halo" cx="50%" cy="44%" r="42%">
+      <stop offset="0" stop-color="#f2a93b" stop-opacity=".55"/>
+      <stop offset=".6" stop-color="#f2a93b" stop-opacity=".12"/>
+      <stop offset="1" stop-color="#f2a93b" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="rt-hood" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1c1c22"/>
+      <stop offset="1" stop-color="#0c0c10"/>
+    </linearGradient>
+    <filter id="rt-glow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="2.4"/>
+    </filter>
+    <clipPath id="rt-clip"><rect width="128" height="128" rx="28"/></clipPath>
+  </defs>
+  <g clip-path="url(#rt-clip)">
+    <rect width="128" height="128" fill="url(#rt-bg)"/>
+    <circle cx="64" cy="56" r="56" fill="url(#rt-halo)"/>
+    <!-- glow rim -->
+    <path d="M64 22c-21 0-30 17-30 35 0 12 4 20 9 25-14 4-24 14-27 30l-2 16h100l-2-16c-3-16-13-26-27-30 5-5 9-13 9-25 0-18-9-35-30-35z" fill="none" stroke="#f2a93b" stroke-width="3" opacity=".85" filter="url(#rt-glow)"/>
+    <!-- hood -->
+    <path d="M64 22c-21 0-30 17-30 35 0 12 4 20 9 25-14 4-24 14-27 30l-2 16h100l-2-16c-3-16-13-26-27-30 5-5 9-13 9-25 0-18-9-35-30-35z" fill="url(#rt-hood)" stroke="#f2a93b" stroke-width="1.2" stroke-opacity=".9"/>
+    <!-- face opening -->
+    <ellipse cx="64" cy="57" rx="17" ry="22" fill="#000" stroke="#2b2c36" stroke-width="2.5"/>
+    <!-- drawstrings -->
+    <path d="M58 78l-1.5 18M70 78l1.5 18" stroke="#55565f" stroke-width="1.4" stroke-linecap="round"/>
+    <circle cx="56.5" cy="96.5" r="1.6" fill="#55565f"/>
+    <circle cx="71.5" cy="96.5" r="1.6" fill="#55565f"/>
+    <!-- barcode -->
+    <g fill="#f2a93b">
+      <rect x="76" y="98" width="2" height="11"/><rect x="79.5" y="98" width="1" height="11"/>
+      <rect x="82" y="98" width="1" height="11"/><rect x="84.5" y="98" width="2" height="11"/>
+      <rect x="88" y="98" width="1" height="11"/><rect x="90.5" y="98" width="1" height="11"/>
+      <rect x="93" y="98" width="2" height="11"/>
+    </g>
+  </g>
+</svg>

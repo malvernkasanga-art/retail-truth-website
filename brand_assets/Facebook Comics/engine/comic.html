@@ -1,0 +1,400 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<title>The Retail Truth Comic</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@700&family=Bangers&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; background: #fff; }
+  #page { width: 1080px; height: 1620px; box-sizing: border-box; padding: 14px; display: grid; grid-template-rows: repeat(3, 1fr); gap: 14px; background: #fff; }
+  .panel { position: relative; border: 5px solid #111; overflow: hidden; border-radius: 4px; }
+  .panel svg { position: absolute; left: 0; top: 0; }
+  svg.art { z-index: 1; }
+  svg.tails { z-index: 2; overflow: visible; }
+  .bubble { position: absolute; z-index: 3; box-sizing: border-box; background: #fff; border: 4px solid #111; border-radius: 46px;
+    padding: 18px 28px 20px; font: 700 31px/1.14 'Comic Neue', 'Comic Sans MS', sans-serif; text-transform: uppercase; color: #111; letter-spacing: .4px; text-align: left; }
+  .bubble.thought { background: #ffd43b; border-radius: 50% / 46%; padding: 26px 34px; text-align: center; font-size: 27px; }
+  .bubble.shout { border-width: 5px; font-size: 36px; }
+  .caption { position: absolute; z-index: 3; left: 0; top: 0; background: #ffd43b; border-right: 4px solid #111; border-bottom: 4px solid #111; padding: 8px 16px;
+    font: 700 24px/1.1 'Comic Neue', sans-serif; text-transform: uppercase; color: #111; }
+  .brand { position: absolute; z-index: 4; right: 14px; bottom: 8px; font: 700 20px 'Comic Neue', sans-serif; color: rgba(255,255,255,.9);
+    text-shadow: 0 1px 3px rgba(0,0,0,.8), 0 0 2px rgba(0,0,0,.9); letter-spacing: .5px; }
+</style></head>
+<body>
+<div id="page"></div>
+<script src="comics.js"></script>
+<script>
+const W = 1042, H = 511;   // inner panel size in px
+let uid = 0;
+
+// ---------- shared defs: gradients and glows ----------
+const DEFS = `
+<defs>
+  <linearGradient id="hoodie" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#454553"/><stop offset=".45" stop-color="#1e1e27"/><stop offset="1" stop-color="#0a0a0f"/></linearGradient>
+  <radialGradient id="hood" cx=".35" cy=".25" r=".85"><stop offset="0" stop-color="#4c4c5a"/><stop offset=".55" stop-color="#191920"/><stop offset="1" stop-color="#08080c"/></radialGradient>
+  <radialGradient id="faceHole" cx=".5" cy=".45" r=".6"><stop offset="0" stop-color="#000"/><stop offset=".8" stop-color="#050508"/><stop offset="1" stop-color="#1a1a22"/></radialGradient>
+  <linearGradient id="sleeveW" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3a47"/><stop offset="1" stop-color="#121218"/></linearGradient>
+  <linearGradient id="blazer" x1="0.15" y1="0" x2="0.85" y2="1"><stop offset="0" stop-color="#55596a"/><stop offset=".5" stop-color="#2e313b"/><stop offset="1" stop-color="#17191f"/></linearGradient>
+  <linearGradient id="sleeveM" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#4a4e5c"/><stop offset="1" stop-color="#1e2027"/></linearGradient>
+  <radialGradient id="mHead" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#3b3b45"/><stop offset=".6" stop-color="#121216"/><stop offset="1" stop-color="#050507"/></radialGradient>
+  <linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#cfd4dc"/></linearGradient>
+  <radialGradient id="hand" cx=".35" cy=".3" r=".8"><stop offset="0" stop-color="#3a3a44"/><stop offset="1" stop-color="#0b0b0f"/></radialGradient>
+  <linearGradient id="phone" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3a3f4a"/><stop offset="1" stop-color="#0d0f13"/></linearGradient>
+  <filter id="eyeGlow" x="-100%" y="-100%" width="300%" height="300%">
+    <feGaussianBlur in="SourceGraphic" stdDeviation="5" result="b"/>
+    <feMerge><feMergeNode in="b"/><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="rimAmber" x="-30%" y="-30%" width="160%" height="160%">
+    <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/><feGaussianBlur in="d" stdDeviation="9" result="g"/>
+    <feFlood flood-color="#ffa63d" flood-opacity=".9"/><feComposite in2="g" operator="in" result="glow"/>
+    <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="rimBlue" x="-30%" y="-30%" width="160%" height="160%">
+    <feMorphology in="SourceAlpha" operator="dilate" radius="3" result="d"/><feGaussianBlur in="d" stdDeviation="9" result="g"/>
+    <feFlood flood-color="#5aaaff" flood-opacity=".9"/><feComposite in2="g" operator="in" result="glow"/>
+    <feMerge><feMergeNode in="glow"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+  <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+  <filter id="dof"><feGaussianBlur stdDeviation="1.3"/></filter>
+  <filter id="screenGlow" x="-100%" y="-100%" width="300%" height="300%"><feGaussianBlur stdDeviation="6"/></filter>
+</defs>`;
+
+// ---------- seeded random so backgrounds look the same every render ----------
+function rng(seed) { let s = seed >>> 0 || 1; return () => (s = (s * 1664525 + 1013904223) >>> 0) / 4294967296; }
+
+// ---------- eyes ----------
+// Unit shapes for the LEFT eye (inner side is +x). The right eye is mirrored.
+const EYE = {
+  normal: 'M -1 0 A 1 1 0 1 0 1 0 A 1 1 0 1 0 -1 0 Z',
+  angry: 'M -1 -0.5 L 1 0.2 C 1 0.75 0.5 1 0 1 C -0.6 1 -1 0.6 -1 0 Z',
+  stern: 'M -1 -0.35 L 1 0.05 C 0.9 0.5 0.5 0.62 0 0.62 C -0.6 0.62 -1 0.3 -1 -0.35 Z',
+  shocked: 'M -1.15 0 A 1.15 1.3 0 1 0 1.15 0 A 1.15 1.3 0 1 0 -1.15 0 Z',
+  worried: 'M -1 0.2 L 1 -0.45 C 1 0.5 0.6 1 0 1 C -0.6 1 -1 0.6 -1 0.2 Z',
+  smug: 'M -1 0.15 C -0.5 0 0.5 0 1 0.15 C 0.9 0.7 0.5 0.85 0 0.85 C -0.5 0.85 -0.9 0.7 -1 0.15 Z',
+  happy: 'M -1 0.55 Q 0 -1.05 1 0.55 Q 0 -0.3 -1 0.55 Z',
+  tired: 'M -1 0.25 Q 0 0.55 1 0.25 Q 0 0.85 -1 0.25 Z',
+  annoyed: 'M -1 0.05 L 1 0.05 C 0.9 0.7 0.5 0.85 0 0.85 C -0.5 0.85 -0.9 0.7 -1 0.05 Z',
+};
+function eyes(expr, cy, sep, w, h, look = 0) {
+  const d = EYE[expr] || EYE.normal;
+  return `<g filter="url(#eyeGlow)" fill="#fff">
+    <path d="${d}" transform="translate(${-sep + look} ${cy}) scale(${w} ${h})"/>
+    <path d="${d}" transform="translate(${sep + look} ${cy}) scale(${-w} ${h})"/></g>`;
+}
+
+// ---------- arms ----------
+// Each pose lists arms as [shoulder, elbow, hand] points plus what the hand holds.
+const POSES = {
+  down:    { L: [[-132, -212], [-165, -100], [-168, 60]], R: [[132, -212], [165, -100], [168, 60]] },
+  gesture: { L: [[-132, -212], [-178, -100], [-180, 60]], R: [[132, -212], [228, -105], [268, -205]], openR: true },
+  shrug:   { L: [[-132, -212], [-228, -105], [-268, -205]], R: [[132, -212], [228, -105], [268, -205]], openL: true, openR: true },
+  chin:    { L: [[-132, -212], [-178, -100], [-180, 60]], R: [[132, -212], [150, -105], [42, -236]] },
+  phoneEar:{ L: [[-132, -212], [-178, -100], [-180, 60]], R: [[132, -212], [178, -115], [98, -305]], phoneEar: true },
+  holdPhone:{ L: [[-132, -212], [-178, -100], [-180, 60]], R: [[132, -212], [150, -100], [62, -150]], phoneHold: true },
+  crossed: { R: [[132, -212], [170, -95], [-58, -118]], L: [[-132, -212], [-170, -85], [62, -100]], crossed: true },
+  point:   { L: [[-132, -212], [-178, -100], [-180, 60]], R: [[132, -212], [235, -175], [335, -200]], pointR: true },
+  facepalm:{ L: [[-132, -212], [-178, -100], [-180, 60]], R: [[132, -212], [140, -100], [8, -318]] },
+  hips:    { L: [[-132, -212], [-215, -120], [-150, -40]], R: [[132, -212], [215, -120], [150, -40]] },
+};
+function arm(pts, grad, width) {
+  const [s, e, h] = pts;
+  const d = `M ${s[0]} ${s[1]} L ${e[0]} ${e[1]} L ${h[0]} ${h[1]}`;
+  return `<path d="${d}" fill="none" stroke="#07070a" stroke-width="${width + 7}" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${d}" fill="none" stroke="url(#${grad})" stroke-width="${width}" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="${d}" fill="none" stroke="rgba(255,255,255,.07)" stroke-width="${width * .3}" stroke-linecap="round" transform="translate(-8 -6)"/>`;
+}
+function hand([x, y], open, cuff, from) {
+  let c = '';
+  if (cuff && from) {
+    const dx = x - from[0], dy = y - from[1], len = Math.hypot(dx, dy) || 1;
+    const ax = x - dx / len * 30, ay = y - dy / len * 30, ang = Math.atan2(dy, dx) * 180 / Math.PI;
+    c = `<ellipse cx="${ax}" cy="${ay}" rx="10" ry="27" transform="rotate(${ang} ${ax} ${ay})" fill="#e9edf2" stroke="#9aa1ab" stroke-width="2"/>`;
+  }
+  if (open) return `${c}<g transform="translate(${x} ${y})">
+      <ellipse cx="0" cy="0" rx="30" ry="33" fill="url(#hand)" stroke="#000" stroke-width="2"/>
+      ${[-20, -7, 7, 20].map((fx, i) => `<rect x="${fx - 7}" y="${-58 + Math.abs(i - 1.5) * 5}" width="14" height="38" rx="7" fill="url(#hand)" stroke="#000" stroke-width="2"/>`).join('')}
+      <ellipse cx="-30" cy="4" rx="9" ry="18" transform="rotate(-35 -30 4)" fill="url(#hand)" stroke="#000" stroke-width="2"/></g>`;
+  return `${c}<ellipse cx="${x}" cy="${y}" rx="29" ry="31" fill="url(#hand)" stroke="#000" stroke-width="2"/>
+    <ellipse cx="${x - 8}" cy="${y - 10}" rx="10" ry="7" fill="rgba(255,255,255,.08)"/>`;
+}
+function pointHand([x, y]) {
+  return `<g transform="translate(${x} ${y})"><ellipse cx="0" cy="0" rx="27" ry="24" fill="url(#hand)" stroke="#000" stroke-width="2"/>
+    <rect x="10" y="-11" width="48" height="15" rx="7.5" fill="url(#hand)" stroke="#000" stroke-width="2"/></g>`;
+}
+function phone(x, y, rot, lit) {
+  return `<g transform="translate(${x} ${y}) rotate(${rot})">
+    ${lit ? `<rect x="-26" y="-48" width="52" height="96" rx="10" fill="#9fd0ff" opacity=".55" filter="url(#screenGlow)"/>` : ''}
+    <rect x="-17" y="-34" width="34" height="68" rx="7" fill="url(#phone)" stroke="#000" stroke-width="2"/>
+    ${lit ? `<rect x="-13" y="-28" width="26" height="54" rx="4" fill="#bfe1ff"/>` : ''}</g>`;
+}
+function arms(pose, grad, width, cuff) {
+  const p = POSES[pose] || POSES.down;
+  let out = '';
+  const order = p.crossed ? ['R', 'L'] : ['L', 'R'];
+  for (const side of order) {
+    out += arm(p[side], grad, width);
+    const h = p[side][2];
+    if (h[1] > 40) continue;  // hand below the frame
+    if (side === 'R' && p.pointR) out += pointHand(h);
+    else out += hand(h, (side === 'R' && p.openR) || (side === 'L' && p.openL), cuff, p[side][1]);
+    if (side === 'R' && p.phoneEar) out += phone(h[0] + 6, h[1] - 18, -12, false);
+    if (side === 'R' && p.phoneHold) out += phone(h[0] - 4, h[1] - 44, 8, true);
+  }
+  return out;
+}
+
+// ---------- characters ----------
+// Poses whose arms cross in front of the body; the rest hang behind it.
+const FRONT = ['chin', 'facepalm', 'phoneEar', 'holdPhone', 'crossed', 'hips'];
+function worker(o) {
+  const ex = o.eyes || 'normal';
+  const faceArms = FRONT.includes(o.pose);
+  const body = `
+    <path d="M -165 60 L -165 -150 C -165 -215 -132 -246 -70 -256 L 70 -256 C 132 -246 165 -215 165 -150 L 165 60 Z" fill="url(#hoodie)" stroke="#000" stroke-width="3"/>
+    <path d="M -95 -30 Q 0 -48 95 -30 L 85 60 L -85 60 Z" fill="rgba(0,0,0,.25)"/>
+    <path d="M -95 -30 Q 0 -48 95 -30" fill="none" stroke="rgba(255,255,255,.08)" stroke-width="3"/>
+    <path d="M -120 -200 Q -110 -120 -128 -40" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="5"/>
+    <g transform="translate(48 -196)">${[0, 6, 10, 18, 22, 28, 34, 38, 44].map((x, i) => `<rect x="${x}" y="0" width="${i % 3 === 0 ? 4 : 2.5}" height="30" fill="#ffae3d"/>`).join('')}</g>
+    <path d="M -100 -238 C -128 -300 -122 -436 0 -446 C 122 -436 128 -300 100 -238 C 60 -222 -60 -222 -100 -238 Z" fill="url(#hood)" stroke="#000" stroke-width="3"/>
+    <path d="M -86 -380 C -60 -425 -10 -436 20 -432" fill="none" stroke="rgba(255,255,255,.13)" stroke-width="6" stroke-linecap="round"/>
+    <ellipse cx="0" cy="-336" rx="70" ry="86" fill="#26262f"/>
+    <ellipse cx="0" cy="-334" rx="62" ry="78" fill="url(#faceHole)"/>
+    ${eyes(ex, -338, 25, 13, 19, o.look || 0)}
+    <path d="M -24 -246 Q -27 -220 -26 -192" fill="none" stroke="#8d8d96" stroke-width="3.5"/><circle cx="-26" cy="-190" r="4.5" fill="#6f6f78"/>
+    <path d="M 24 -246 Q 27 -220 26 -192" fill="none" stroke="#8d8d96" stroke-width="3.5"/><circle cx="26" cy="-190" r="4.5" fill="#6f6f78"/>`;
+  return charWrap(o, 'rimAmber', faceArms ? body + arms(o.pose, 'sleeveW', 58) : arms(o.pose, 'sleeveW', 58) + body, faceArms);
+}
+function manager(o) {
+  const ex = o.eyes || 'stern';
+  const faceArms = FRONT.includes(o.pose);
+  const body = `
+    <path d="M -155 60 L -155 -150 C -155 -205 -124 -238 -62 -248 L 62 -248 C 124 -238 155 -205 155 -150 L 155 60 Z" fill="url(#blazer)" stroke="#000" stroke-width="3"/>
+    <rect x="-24" y="-290" width="48" height="50" fill="#0b0b0e"/>
+    <path d="M -48 -248 L 48 -248 L 0 -132 Z" fill="url(#shirt)"/>
+    <path d="M -48 -248 L -74 -238 L -42 -150 L -14 -112 L 0 -132 Z" fill="#20232b" stroke="#000" stroke-width="2"/>
+    <path d="M 48 -248 L 74 -238 L 42 -150 L 14 -112 L 0 -132 Z" fill="#20232b" stroke="#000" stroke-width="2"/>
+    <path d="M -110 -205 Q -100 -120 -112 -30" fill="none" stroke="rgba(255,255,255,.06)" stroke-width="6"/>
+    <circle cx="0" cy="-70" r="5" fill="#0d0d10"/><circle cx="0" cy="-20" r="5" fill="#0d0d10"/>
+    <path d="M -30 -250 L -9 -124 M 30 -250 L 9 -124" stroke="#c9302c" stroke-width="8" stroke-linecap="round"/>
+    <g transform="translate(0 -92)"><rect x="-30" y="-34" width="60" height="74" rx="7" fill="#f4f5f7" stroke="#a9adb4" stroke-width="2"/>
+      <rect x="-23" y="-26" width="46" height="13" rx="2" fill="#c9302c"/>
+      ${[0, 6, 9, 15, 19, 25, 30, 36, 40].map((x, i) => `<rect x="${x - 21}" y="0" width="${i % 3 ? 2.5 : 4}" height="28" fill="#f2a23a"/>`).join('')}</g>
+    <ellipse cx="-68" cy="-332" rx="10" ry="18" fill="#0d0d11"/><ellipse cx="68" cy="-332" rx="10" ry="18" fill="#0d0d11"/>
+    <ellipse cx="0" cy="-336" rx="68" ry="78" fill="url(#mHead)" stroke="#000" stroke-width="3"/>
+    <path d="M -70 -338 C -78 -410 -30 -432 5 -429 C 52 -427 82 -404 72 -338 C 62 -378 22 -390 -10 -386 C -42 -384 -62 -364 -70 -338 Z" fill="#111116" stroke="#000" stroke-width="2"/>
+    <path d="M -40 -414 C -15 -425 20 -424 40 -414" fill="none" stroke="rgba(255,255,255,.16)" stroke-width="5" stroke-linecap="round"/>
+    <g fill="rgba(180,210,255,.18)" stroke="#aab1ba" stroke-width="4.5">
+      <rect x="-52" y="-416" width="40" height="22" rx="7"/><rect x="12" y="-416" width="40" height="22" rx="7"/>
+      <path d="M -12 -406 Q 0 -412 12 -406" fill="none"/></g>
+    ${eyes(ex, -332, 26, 15, 13, o.look || 0)}`;
+  return charWrap(o, 'rimBlue', faceArms ? body + arms(o.pose, 'sleeveM', 56, true) : arms(o.pose, 'sleeveM', 56, true) + body, faceArms);
+}
+function charWrap(o, rim, inner) {
+  const s = o.scale || 1, f = o.flip ? -1 : 1;
+  return `<g transform="translate(${o.x} ${o.y ?? H + 40})">
+    <ellipse cx="${30 * f}" cy="-200" rx="${190 * s}" ry="${250 * s}" fill="rgba(0,0,0,.28)" filter="url(#soft)"/>
+    <g transform="scale(${s * f} ${s})" filter="url(#${rim})">${inner}</g></g>`;
+}
+
+// ---------- backgrounds ----------
+function wrapLines(text, max) {
+  const words = String(text).split(' '); const lines = []; let line = '';
+  for (const w of words) { if ((line + ' ' + w).trim().length > max) { lines.push(line.trim()); line = w; } else line += ' ' + w; }
+  if (line.trim()) lines.push(line.trim()); return lines;
+}
+function textBlock(lines, x, y, size, color, weight = 700, family = "'Comic Neue', sans-serif", anchor = 'middle') {
+  return lines.map((l, i) => `<text x="${x}" y="${y + i * size * 1.12}" font-family="${family}" font-weight="${weight}" font-size="${size}" fill="${color}" text-anchor="${anchor}">${esc(l)}</text>`).join('');
+}
+function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
+function frameSign(x, y, w, h, text, opts = {}) {
+  const lines = wrapLines(text.toUpperCase(), opts.chars || 14);
+  const longest = Math.max(...lines.map(l => l.length));
+  const size = opts.size || Math.min(26, (h - 30) / (lines.length * 1.15), (w - 34) / (longest * .58));
+  return `<g><rect x="${x + 6}" y="${y + 8}" width="${w}" height="${h}" fill="rgba(0,0,0,.18)" rx="3"/>
+    <rect x="${x}" y="${y}" width="${w}" height="${h}" rx="3" fill="${opts.frame || '#6b4a2f'}"/>
+    <rect x="${x + 9}" y="${y + 9}" width="${w - 18}" height="${h - 18}" fill="${opts.paper || '#f6efe0'}"/>
+    ${textBlock(lines, x + w / 2, y + h / 2 - (lines.length - 1) * size * .56 + size * .35, size, opts.ink || '#2a2a2a')}</g>`;
+}
+function mug(x, y, text) {
+  const lines = wrapLines(text.toUpperCase(), 9);
+  return `<g transform="translate(${x} ${y})">
+    <path d="M 58 22 C 92 22 92 70 58 72" fill="none" stroke="#d9d9d9" stroke-width="11"/><path d="M 58 22 C 92 22 92 70 58 72" fill="none" stroke="#b9b9b9" stroke-width="4"/>
+    <rect x="-4" y="0" width="68" height="98" rx="8" fill="#f2f2f2" stroke="#333" stroke-width="2.5"/>
+    <ellipse cx="30" cy="2" rx="34" ry="8" fill="#5b3a22" stroke="#333" stroke-width="2"/>
+    <rect x="-4" y="0" width="16" height="98" fill="rgba(0,0,0,.06)"/>
+    ${textBlock(lines, 30, 44 - (lines.length - 1) * 7, 13, '#333')}</g>`;
+}
+function plant(x, y, s = 1) {
+  return `<g transform="translate(${x} ${y}) scale(${s})">
+    ${[[-40, -90, -25], [-10, -120, -5], [25, -100, 20], [45, -70, 40], [-55, -55, -50], [5, -80, 8]].map(([dx, dy, r]) =>
+      `<path d="M 0 -10 Q ${dx * .4} ${dy * .5} ${dx} ${dy} Q ${dx * .8 + 14} ${dy * .55} 0 -10" fill="#3f8f4e" stroke="#2a6235" stroke-width="2"/>`).join('')}
+    <path d="M -38 -12 L 38 -12 L 30 40 L -30 40 Z" fill="#eeeeee" stroke="#9a9a9a" stroke-width="2"/></g>`;
+}
+function shelves(r, x0, x1, top, rows, rowH) {
+  let s = `<rect x="${x0}" y="${top - 20}" width="${x1 - x0}" height="${rows * rowH + 30}" fill="#c9c3b5"/>`;
+  const colors = ['#e4572e', '#29335c', '#f3a712', '#2e86ab', '#a23b72', '#3bb273', '#f2f2f2', '#7768ae', '#ef8354', '#4f6d7a', '#d62246', '#ffd166'];
+  for (let row = 0; row < rows; row++) {
+    const base = top + (row + 1) * rowH;
+    let x = x0 + 8;
+    while (x < x1 - 30) {
+      const w = 26 + r() * 40, h = rowH * (.45 + r() * .4), c = colors[Math.floor(r() * colors.length)];
+      const can = r() < .3;
+      if (can) {
+        s += `<rect x="${x}" y="${base - h}" width="${w * .8}" height="${h}" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width="1.5"/>
+          <ellipse cx="${x + w * .4}" cy="${base - h}" rx="${w * .4}" ry="5" fill="#ddd" stroke="rgba(0,0,0,.3)"/>
+          <rect x="${x}" y="${base - h * .65}" width="${w * .8}" height="${h * .3}" fill="rgba(255,255,255,.55)"/>`;
+        x += w * .8 + 4;
+      } else {
+        s += `<rect x="${x}" y="${base - h}" width="${w}" height="${h}" fill="${c}" stroke="rgba(0,0,0,.35)" stroke-width="1.5"/>
+          <rect x="${x}" y="${base - h}" width="${w * .22}" height="${h}" fill="rgba(255,255,255,.18)"/>
+          <rect x="${x + w * .2}" y="${base - h * .7}" width="${w * .6}" height="${h * .22}" rx="2" fill="rgba(255,255,255,.65)"/>`;
+        x += w + 4;
+      }
+    }
+    s += `<rect x="${x0}" y="${base}" width="${x1 - x0}" height="12" fill="#8f8b84"/><rect x="${x0}" y="${base}" width="${x1 - x0}" height="3" fill="#b5b1aa"/>`;
+    for (let t = x0 + 30; t < x1 - 20; t += 70 + r() * 40) s += `<rect x="${t}" y="${base + 2}" width="26" height="14" fill="#ffd43b" stroke="#b58f00" stroke-width="1"/>`;
+  }
+  return s;
+}
+const BG = {
+  store(o) {
+    const r = rng(o.seed || 7);
+    let s = `<rect width="${W}" height="${H}" fill="#e9e3d6"/>
+      <rect y="0" width="${W}" height="40" fill="#d9d2c2"/>
+      ${shelves(r, 0, W, 70, 3, 112)}
+      <rect y="${H - 70}" width="${W}" height="70" fill="#cdc4b2"/>
+      ${[...Array(12)].map((_, i) => `<line x1="${i * 100 - 40}" y1="${H - 70}" x2="${i * 100 - 120}" y2="${H}" stroke="rgba(0,0,0,.08)" stroke-width="2"/>`).join('')}`;
+    if (o.banner) s += `<g><line x1="${W / 2 - 200}" y1="0" x2="${W / 2 - 200}" y2="16" stroke="#555" stroke-width="2"/><line x1="${W / 2 + 200}" y1="0" x2="${W / 2 + 200}" y2="16" stroke="#555" stroke-width="2"/>
+      <rect x="${W / 2 - 250}" y="14" width="500" height="54" rx="4" fill="#c62f2f" stroke="#7d1717" stroke-width="3"/>
+      ${textBlock([o.banner.toUpperCase()], W / 2, 51, 28, '#fff', 400, "'Bangers', sans-serif")}</g>`;
+    return s;
+  },
+  till(o) {
+    const r = rng(o.seed || 3);
+    let s = `<rect width="${W}" height="${H}" fill="#e6e0d2"/>${shelves(r, 0, W, 40, 2, 120)}
+      <rect y="300" width="${W}" height="${H - 300}" fill="#ddd6c6"/>`;
+    if (o.sign) s += frameSign(o.signX ?? 40, 40, 230, 150, o.sign, { frame: '#2c2c2c', paper: '#fffbe8' });
+    return s;
+  },
+  breakroom(o) {
+    let s = `<rect width="${W}" height="${H}" fill="#d8e0e3"/>
+      <rect y="${H - 150}" width="${W}" height="150" fill="#b9c5c9"/><rect y="${H - 152}" width="${W}" height="6" fill="#9aa8ad"/>
+      <g transform="translate(${o.clockX ?? 520} 70)"><circle r="42" fill="#fff" stroke="#333" stroke-width="5"/>
+        ${[...Array(12)].map((_, i) => `<line x1="0" y1="-34" x2="0" y2="-28" stroke="#333" stroke-width="3" transform="rotate(${i * 30})"/>`).join('')}
+        <line x1="0" y1="0" x2="0" y2="-24" stroke="#222" stroke-width="5" stroke-linecap="round" transform="rotate(${o.clockH ?? 300})"/>
+        <line x1="0" y1="0" x2="0" y2="-32" stroke="#222" stroke-width="3" stroke-linecap="round" transform="rotate(${o.clockM ?? 0})"/></g>
+      <g transform="translate(${o.vendX ?? 900} 40)"><rect width="150" height="420" rx="6" fill="#b3261e" stroke="#5c120e" stroke-width="3"/>
+        <rect x="14" y="20" width="96" height="300" fill="#2b2f36"/>
+        ${[...Array(5)].map((_, i) => [...Array(3)].map((_, j) => `<rect x="${22 + j * 30}" y="${30 + i * 58}" width="22" height="40" rx="3" fill="${['#ffd166', '#06d6a0', '#ef476f', '#118ab2'][(i + j) % 4]}"/>`).join('')).join('')}
+        <rect x="118" y="60" width="22" height="80" rx="3" fill="#ddd"/></g>`;
+    if (o.note) s += `<g transform="translate(${o.noteX ?? 40} 40)"><rect width="280" height="200" rx="4" fill="#b98a55" stroke="#7a5630" stroke-width="5"/>
+        <rect x="16" y="16" width="70" height="60" fill="#fff59d" transform="rotate(-6 50 46)"/><rect x="200" y="120" width="60" height="55" fill="#a5d6a7" transform="rotate(5 230 147)"/>
+        ${frameSign(70, 35, 160, 130, o.note, { frame: 'none', paper: '#ffffff', chars: 12 })}
+        <circle cx="150" cy="44" r="6" fill="#d32f2f"/></g>`;
+    return s;
+  },
+  office(o) {
+    let s = `<rect width="${W}" height="${H}" fill="#e7e1d5"/>
+      <g transform="translate(${o.winX ?? 30} 40)"><rect width="230" height="300" fill="#8fb8d8" stroke="#555" stroke-width="6"/>
+        ${[[20, 120, 50], [80, 70, 60], [150, 140, 55], [60, 180, 40]].map(([x, y, w]) => `<rect x="${x}" y="${y}" width="${w}" height="${300 - y}" fill="#6f8fae"/>`).join('')}
+        <line x1="115" y1="0" x2="115" y2="300" stroke="#555" stroke-width="5"/></g>`;
+    if (o.sign) s += frameSign(o.signX ?? 790, 50, 210, 190, o.sign, { chars: 12 });
+    if (o.plant !== false) s += plant(o.plantX ?? 960, H - 120, 1);
+    return s;
+  },
+  home(o) {
+    let s = `<rect width="${W}" height="${H}" fill="#6b6177"/>
+      <rect y="${H - 200}" width="${W}" height="200" fill="#4d4658"/>
+      <g transform="translate(${o.winX ?? 40} 40)"><rect width="200" height="230" fill="#1f2a44" stroke="#2e2a33" stroke-width="8"/>
+        <circle cx="150" cy="50" r="18" fill="#f5f0c8"/>${[[30, 30], [80, 90], [40, 150], [120, 120]].map(([x, y]) => `<circle cx="${x}" cy="${y}" r="2" fill="#fff"/>`).join('')}
+        <line x1="100" y1="0" x2="100" y2="230" stroke="#2e2a33" stroke-width="6"/></g>
+      <path d="M 0 ${H - 210} Q ${W / 2} ${H - 250} ${W} ${H - 210} L ${W} ${H} L 0 ${H} Z" fill="#2f3a55"/>
+      <g transform="translate(${o.lampX ?? 930} 120)"><ellipse cx="0" cy="40" rx="140" ry="160" fill="rgba(255,200,120,.18)" filter="url(#soft)"/>
+        <path d="M -50 0 L 50 0 L 35 -70 L -35 -70 Z" fill="#e8c27a"/><rect x="-4" y="0" width="8" height="200" fill="#333"/></g>`;
+    if (o.sign) s += frameSign(o.signX ?? 720, 50, 170, 130, o.sign, { chars: 11, frame: '#2b2b2b' });
+    return s;
+  },
+};
+
+// ---------- foreground pieces ----------
+const FG = {
+  counter(o) {
+    return `<g><rect x="0" y="${H - 120}" width="${W}" height="120" fill="#5c6670"/>
+      <rect x="0" y="${H - 128}" width="${W}" height="16" fill="#3e464e"/>
+      <rect x="0" y="${H - 128}" width="${W}" height="4" fill="#8b959e"/>
+      ${o.till ? `<g transform="translate(${o.tillX ?? 820} ${H - 230})"><rect x="-10" y="70" width="20" height="40" fill="#222"/>
+        <rect x="-80" y="0" width="160" height="80" rx="6" fill="#1d1f24" stroke="#000" stroke-width="3"/>
+        <rect x="-70" y="8" width="140" height="62" rx="3" fill="#7fd1ff"/>
+        ${textBlock([o.till], 0, 46, 22, '#0b3954')}</g>` : ''}</g>`;
+  },
+  desk(o) {
+    return `<g><rect x="0" y="${H - 95}" width="${W}" height="95" fill="#9a6b45"/><rect x="0" y="${H - 100}" width="${W}" height="10" fill="#7a5233"/>
+      ${o.monitor ? `<g transform="translate(${o.monitorX ?? 180} ${H - 300})"><rect x="-130" y="0" width="260" height="180" rx="8" fill="#16181d" stroke="#000" stroke-width="3"/>
+        <rect x="-12" y="180" width="24" height="25" fill="#222"/><rect x="-60" y="200" width="120" height="10" rx="4" fill="#222"/></g>` : ''}
+      ${o.mug ? mug(o.mugX ?? 40, H - 190, o.mug) : ''}</g>`;
+  },
+  table(o) {
+    return `<g><path d="M 0 ${H - 90} L ${W} ${H - 90} L ${W} ${H} L 0 ${H} Z" fill="#c8b08f"/><rect y="${H - 96}" width="${W}" height="8" fill="#a68c6a"/>
+      ${o.mug ? mug(o.mugX ?? 60, H - 185, o.mug) : ''}</g>`;
+  },
+};
+
+// ---------- bubbles ----------
+function placeBubbles(panelEl, panel, chars) {
+  const tails = panelEl.querySelector('svg.tails');
+  (panel.bubbles || []).forEach(b => {
+    const el = document.createElement('div');
+    el.className = 'bubble ' + (b.type || 'speech');
+    el.style.left = b.x + 'px'; el.style.top = b.y + 'px'; el.style.width = b.w + 'px';
+    if (b.size) el.style.fontSize = b.size + 'px';
+    el.textContent = b.text;
+    panelEl.appendChild(el);
+    const c = chars[b.to ?? 0];
+    if (!c) return;
+    const s = c.scale || 1, f = c.flip ? -1 : 1;
+    const headR = (c.who === 'manager' ? 80 : 112) * s;
+    const hx = c.x + (c.look || 0) * s * f, hy = (c.y ?? H + 40) - 336 * s;
+    const mid = b.x + el.offsetWidth / 2;
+    // aim beside the head, on the bubble's side, so the tail never covers the face
+    const side = b.side ?? (mid >= hx ? 1 : -1);
+    const tx = hx + side * (headR + 6), ty = hy - 30 * s;
+    const r = { x: b.x, y: b.y, w: el.offsetWidth, h: el.offsetHeight };
+    const cx = r.x + r.w / 2, cy = r.y + r.h / 2;
+    // base point on the bubble edge facing the speaker
+    const bx = Math.max(r.x + 50, Math.min(r.x + r.w - 50, tx < r.x ? r.x + 60 : tx > r.x + r.w ? r.x + r.w - 60 : tx));
+    const by = ty > cy ? r.y + r.h - 6 : r.y + 6;
+    const dist = Math.hypot(tx - bx, ty - by) || 1, ux = (tx - bx) / dist, uy = (ty - by) / dist;
+    const len = Math.min(dist, 170);   // ends at the target beside the head
+    const tip = [bx + ux * len, by + uy * len];
+    if (b.type === 'thought') {
+      tails.innerHTML += [[.3, 13], [.62, 9], [.9, 6]].map(([t, rad]) =>
+        `<circle cx="${bx + ux * len * t}" cy="${by + uy * len * t + 8}" r="${rad}" fill="#ffd43b" stroke="#111" stroke-width="3.5"/>`).join('');
+      return;
+    }
+    const nx = -uy, ny = ux;   // sideways, for the tail's width
+    tails.innerHTML += `<path d="M ${bx - nx * 22} ${by - ny * 22} Q ${bx + ux * len * .55 - nx * 6} ${by + uy * len * .55 - ny * 6} ${tip[0]} ${tip[1]} Q ${bx + ux * len * .55 + nx * 9} ${by + uy * len * .55 + ny * 9} ${bx + nx * 22} ${by + ny * 22} Z" fill="#fff" stroke="#111" stroke-width="4" stroke-linejoin="round"/>`;
+  });
+}
+
+// ---------- render ----------
+function render(comic) {
+  const page = document.getElementById('page');
+  page.innerHTML = '';
+  comic.panels.forEach((p, i) => {
+    const el = document.createElement('div'); el.className = 'panel';
+    const bgFn = BG[p.bg.type] || BG.store;
+    const chars = p.chars || [];
+    const art = `<svg class="art" width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">${DEFS}
+      <g filter="url(#dof)">${bgFn(p.bg)}</g>
+      ${chars.map(c => (c.who === 'manager' ? manager : worker)(c)).join('')}
+      ${p.fg ? FG[p.fg.type](p.fg) : ''}
+    </svg><svg class="tails" width="${W}" height="${H}"></svg>`;
+    el.innerHTML = art + (p.caption ? `<div class="caption">${esc(p.caption)}</div>` : '') + (i === comic.panels.length - 1 ? '<div class="brand">@RetailTruth</div>' : '');
+    page.appendChild(el);
+    placeBubbles(el, p, chars);
+  });
+}
+const id = new URLSearchParams(location.search).get('id');
+const comic = (window.COMICS || []).find(c => String(c.id) === id) || window.COMICS[0];
+document.title = comic.title;
+// Load the comic fonts before measuring any bubble, or the sizes come out wrong.
+Promise.all([document.fonts.load("700 31px 'Comic Neue'"), document.fonts.load("28px 'Bangers'")])
+  .catch(() => {}).then(() => document.fonts.ready).then(() => { render(comic); document.body.dataset.ready = '1'; });
+</script>
+</body></html>

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Retail Truth Logo</title>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  html, body { margin: 0; background: transparent; }
+  body { font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; }
+  .lockup { display: none; align-items: center; gap: 28px; padding: 24px; }
+  .h .lockup.horizontal, .s .lockup.stacked { display: flex; }
+  .stacked { flex-direction: column; gap: 22px; text-align: center; }
+  .mark { width: 168px; height: 168px; filter: drop-shadow(0 10px 30px rgba(242,169,59,.18)); }
+  .stacked .mark { width: 220px; height: 220px; }
+  .word { color: #f2a93b; font-weight: 700; font-size: 104px; line-height: .86; letter-spacing: .01em; text-transform: uppercase; text-shadow: 0 0 22px rgba(242,169,59,.35); }
+  .word small { display: block; font-size: .42em; letter-spacing: .2em; font-weight: 600; margin-bottom: 10px; }
+  .rule { width: 92px; height: 6px; background: #f2a93b; border-radius: 3px; margin-top: 18px; }
+  .stacked .rule { margin: 18px auto 0; }
+  .dark .word small { color: #c9cfe0; }
+  .light .word { color: #0b1226; text-shadow: none; }
+  .light .word small { color: #c27a12; }
+  .light .rule { background: #e0941f; }
+</style>
+</head>
+<body>
+<script>
+  // ?v=h|s & ?t=dark|light picks the variant to export
+  const q = new URLSearchParams(location.search);
+  document.body.className = (q.get('v') || 'h') + ' ' + (q.get('t') || 'dark');
+</script>
+<div class="lockup horizontal">
+  <img class="mark" src="logo-mark.svg" alt="">
+  <div class="word"><small>The</small>Retail Truth<div class="rule"></div></div>
+</div>
+<div class="lockup stacked">
+  <img class="mark" src="logo-mark.svg" alt="">
+  <div class="word"><small>The</small>Retail Truth<div class="rule"></div></div>
+</div>
+</body>
+</html>

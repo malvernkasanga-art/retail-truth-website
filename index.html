@@ -1,0 +1,675 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Retail Truth — What your store won't tell you</title>
+<meta name="description" content="A community for retail workers. Honest comics, real stories and practical scripts — and a place to say how the job really feels.">
+<meta property="og:title" content="The Retail Truth">
+<meta property="og:description" content="What your store won't tell you. A community for retail workers.">
+<meta property="og:image" content="website-logo/The%20Retail%20Truth%20-%20Banner.png">
+<meta name="theme-color" content="#060b1a">
+<link rel="icon" type="image/png" href="assets/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          ink: '#060b1a', navy: '#0b1226', deep: '#111a33', panel: '#141d38',
+          amber: { DEFAULT: '#f2a93b', soft: '#f7c574', deep: '#c27a12' },
+          mist: '#c9cfe0', muted: '#8a93ad'
+        },
+        fontFamily: {
+          display: ['"Barlow Condensed"', '"Arial Narrow"', 'sans-serif'],
+          sans: ['"DM Sans"', 'system-ui', 'sans-serif']
+        }
+      }
+    }
+  }
+</script>
+<style>
+  :root {
+    --ink: #060b1a; --navy: #0b1226; --deep: #111a33; --panel: #141d38;
+    --amber: #f2a93b; --amber-deep: #c27a12; --mist: #c9cfe0; --muted: #8a93ad;
+    --line: rgba(201, 207, 224, .10);
+    --spring: cubic-bezier(.34, 1.56, .64, 1);
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    /* spacing tokens */
+    --s-section: clamp(80px, 11vw, 140px);
+  }
+  html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+  body { background: var(--ink); color: var(--mist); font-family: 'DM Sans', system-ui, sans-serif; line-height: 1.7; -webkit-font-smoothing: antialiased; overflow-x: hidden; }
+  h1, h2, h3, .display { font-family: 'Barlow Condensed', 'Arial Narrow', sans-serif; letter-spacing: -0.01em; line-height: .95; color: #fff; }
+  h1, h2 { letter-spacing: -0.03em; }
+  .section { padding-block: var(--s-section); }
+  .eyebrow { font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: .95rem; letter-spacing: .32em; text-transform: uppercase; color: var(--amber); }
+  .amber-glow { color: var(--amber); text-shadow: 0 0 28px rgba(242, 169, 59, .35); }
+  .rule { width: 72px; height: 4px; border-radius: 2px; background: var(--amber); }
+
+  /* grain overlay */
+  .grain { position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: .06; mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+
+  /* hero atmosphere */
+  .hero-bg {
+    background:
+      radial-gradient(38% 52% at 72% 46%, rgba(242,169,59,.22), transparent 70%),
+      radial-gradient(60% 70% at 20% 10%, rgba(30,44,92,.55), transparent 70%),
+      radial-gradient(80% 60% at 50% 110%, rgba(17,26,51,1), transparent 70%),
+      linear-gradient(180deg, #070d20 0%, #060b1a 100%);
+  }
+  .stripes { background: repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0 10px, transparent 10px 22px, rgba(255,255,255,.02) 22px 26px, transparent 26px 44px);
+    mask-image: linear-gradient(90deg, transparent, #000 40%); -webkit-mask-image: linear-gradient(90deg, transparent, #000 40%); }
+  .hero-figure { position: relative; }
+  @media (min-width: 1024px) {
+    .hero-figure { position: absolute; bottom: 0; right: max(32px, calc((100vw - 80rem) / 2 + 32px)); width: min(36vw, 500px); }
+  }
+  .figure-glow { filter: drop-shadow(0 0 2px rgba(242,169,59,.9)) drop-shadow(0 0 18px rgba(242,169,59,.35)); }
+
+  /* surfaces: base → elevated → floating */
+  .surface { background: linear-gradient(180deg, rgba(20,29,56,.75), rgba(14,21,42,.75)); border: 1px solid var(--line);
+    box-shadow: 0 1px 0 rgba(255,255,255,.04) inset, 0 10px 30px -12px rgba(2,6,20,.7), 0 2px 6px -2px rgba(2,6,20,.5); }
+  .floating { box-shadow: 0 1px 0 rgba(255,255,255,.06) inset, 0 30px 60px -20px rgba(2,6,20,.85), 0 12px 30px -16px rgba(242,169,59,.18); }
+
+  /* buttons */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: .55rem; border-radius: 999px; font-weight: 700; padding: .9rem 1.5rem; line-height: 1;
+    transition: transform .35s var(--spring), opacity .2s ease; outline: none; }
+  .btn:hover { transform: translateY(-2px); }
+  .btn:active { transform: translateY(0) scale(.97); }
+  .btn:focus-visible, .chip:focus-visible, .card-btn:focus-visible, .nav-link:focus-visible, .icon-btn:focus-visible, .field:focus-visible {
+    outline: 2px solid var(--amber); outline-offset: 3px; }
+  .btn-primary { background: var(--amber); color: #161004; box-shadow: 0 10px 30px -10px rgba(242,169,59,.6), 0 2px 0 rgba(255,255,255,.35) inset; }
+  .btn-ghost { color: #fff; border: 1px solid rgba(201,207,224,.25); background: rgba(255,255,255,.03); }
+  .btn-ghost:hover { opacity: .9; }
+  .nav-link { position: relative; color: var(--mist); font-weight: 500; font-size: .95rem; padding: .25rem 0; border-radius: 4px; transition: opacity .2s ease; }
+  .nav-link::after { content: ''; position: absolute; left: 0; right: 0; bottom: -4px; height: 2px; background: var(--amber); transform: scaleX(0); transform-origin: left; transition: transform .35s var(--ease); }
+  .nav-link:hover::after, .nav-link:focus-visible::after { transform: scaleX(1); }
+  .nav-link:active { opacity: .7; }
+
+  .header-solid { background: rgba(6, 11, 26, .78); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom: 1px solid var(--line); }
+
+  /* marquee */
+  .marquee { mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent); }
+  .marquee-track { display: flex; gap: 1rem; width: max-content; animation: scroll 46s linear infinite; }
+  .marquee:hover .marquee-track { animation-play-state: paused; }
+  @keyframes scroll { to { transform: translateX(-50%); } }
+  .quote-pill { white-space: nowrap; font-family: 'Barlow Condensed', sans-serif; font-weight: 600; font-size: 1.35rem; color: #fff; padding: .7rem 1.4rem; border-radius: 999px; border: 1px solid var(--line); background: rgba(20,29,56,.6); }
+  .quote-pill span { color: var(--amber); }
+
+  /* comic cards */
+  .card-btn { display: block; width: 100%; text-align: left; border-radius: 20px; outline: none; }
+  .comic-card { transition: transform .5s var(--spring); }
+  .card-btn:hover .comic-card { transform: translateY(-6px); }
+  .card-btn:active .comic-card { transform: translateY(-2px) scale(.985); }
+  .comic-img { transition: transform .8s var(--ease); }
+  .card-btn:hover .comic-img { transform: scale(1.04); }
+  .comic-scroller { scroll-snap-type: x mandatory; scrollbar-width: none; }
+  .comic-scroller::-webkit-scrollbar { display: none; }
+  .comic-scroller > li { scroll-snap-align: start; }
+  .gutter { padding-inline: 16px; scroll-padding-inline: 16px; }
+  @media (min-width: 640px) { .gutter { padding-inline: 24px; scroll-padding-inline: 24px; } }
+  @media (min-width: 1024px) { .gutter { padding-inline: max(32px, calc((100vw - 80rem) / 2 + 32px)); scroll-padding-inline: max(32px, calc((100vw - 80rem) / 2 + 32px)); } }
+
+  /* chips */
+  .chip { display: inline-flex; align-items: center; gap: .45rem; border-radius: 999px; padding: .55rem .95rem; font-weight: 500; font-size: .92rem; color: var(--mist);
+    border: 1px solid rgba(201,207,224,.18); background: rgba(255,255,255,.03); transition: transform .3s var(--spring), opacity .2s ease; cursor: pointer; outline: none; }
+  .chip:hover { transform: translateY(-1px); border-color: rgba(242,169,59,.5); }
+  .chip:active { transform: scale(.96); }
+  .chip[aria-pressed="true"], .chip[aria-checked="true"], input:checked + .chip { background: rgba(242,169,59,.14); border-color: var(--amber); color: #fff; }
+  .mood-input:focus-visible + .chip { outline: 2px solid var(--amber); outline-offset: 3px; }
+
+  .field { width: 100%; background: rgba(6,11,26,.6); border: 1px solid rgba(201,207,224,.16); border-radius: 14px; padding: .85rem 1rem; color: #fff; transition: border-color .2s ease; }
+  .field::placeholder { color: #5f6884; }
+  .field:hover { border-color: rgba(201,207,224,.3); }
+  .field:focus { border-color: var(--amber); outline: none; }
+  select.field { appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23c9cfe0' stroke-width='1.6'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 1rem center; padding-right: 2.5rem; }
+  select.field option { background: #0b1226; }
+
+  .icon-btn { display: inline-flex; align-items: center; gap: .4rem; border-radius: 999px; padding: .4rem .8rem; font-size: .85rem; font-weight: 500; color: var(--muted);
+    border: 1px solid var(--line); transition: transform .3s var(--spring), opacity .2s ease; outline: none; }
+  .icon-btn:hover { color: #fff; transform: translateY(-1px); }
+  .icon-btn:active { transform: scale(.95); }
+  .icon-btn[aria-pressed="true"] { color: var(--amber); border-color: rgba(242,169,59,.5); background: rgba(242,169,59,.08); }
+
+  /* mood meter bars */
+  .bar-fill { transform-origin: left; transition: transform .9s var(--ease); }
+
+  /* reveal */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); }
+  .reveal.in { opacity: 1; transform: none; }
+  .post-enter { animation: postIn .6s var(--spring) both; }
+  @keyframes postIn { from { opacity: 0; transform: translateY(-10px) scale(.98); } }
+
+  /* dialog */
+  dialog { background: transparent; padding: 0; max-width: none; max-height: none; }
+  dialog::backdrop { background: rgba(3,6,16,.82); backdrop-filter: blur(6px); }
+  dialog[open] .dialog-panel { animation: pop .45s var(--spring); }
+  @keyframes pop { from { opacity: 0; transform: translateY(16px) scale(.97); } }
+
+  .toast { transform: translateY(20px); opacity: 0; transition: transform .45s var(--spring), opacity .3s ease; }
+  .toast.show { transform: none; opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .reveal { opacity: 1; transform: none; }
+    html { scroll-behavior: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="grain" aria-hidden="true"></div>
+
+<!-- SVG sprite: the hooded worker -->
+<svg width="0" height="0" class="absolute" aria-hidden="true">
+  <defs>
+    <linearGradient id="hood-fill" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c1c22"/><stop offset="1" stop-color="#0b0b0f"/></linearGradient>
+    <symbol id="hooded" viewBox="0 0 128 128">
+      <path d="M64 22c-21 0-30 17-30 35 0 12 4 20 9 25-14 4-24 14-27 30l-2 16h100l-2-16c-3-16-13-26-27-30 5-5 9-13 9-25 0-18-9-35-30-35z" fill="url(#hood-fill)" stroke="#f2a93b" stroke-width=".9" stroke-opacity=".9"/>
+      <ellipse cx="64" cy="57" rx="17" ry="22" fill="#000" stroke="#2b2c36" stroke-width="2.2"/>
+      <path d="M58 78l-1.5 18M70 78l1.5 18" stroke="#55565f" stroke-width="1.2" stroke-linecap="round"/>
+      <circle cx="56.5" cy="96.5" r="1.4" fill="#55565f"/><circle cx="71.5" cy="96.5" r="1.4" fill="#55565f"/>
+      <g fill="#f2a93b"><rect x="76" y="98" width="2" height="10"/><rect x="79.5" y="98" width="1" height="10"/><rect x="82" y="98" width="1" height="10"/><rect x="84.5" y="98" width="2" height="10"/><rect x="88" y="98" width="1" height="10"/><rect x="90.5" y="98" width="1" height="10"/><rect x="93" y="98" width="2" height="10"/></g>
+    </symbol>
+  </defs>
+</svg>
+
+<!-- ============ HEADER ============ -->
+<header id="top" class="fixed inset-x-0 top-0 z-50 transition-colors" data-header>
+  <nav class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8" aria-label="Main">
+    <a href="#top" class="group flex items-center gap-3 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f2a93b]" aria-label="The Retail Truth — home">
+      <img src="website-logo/logo-mark.svg" alt="" class="h-10 w-10 transition-transform duration-500 group-hover:-rotate-6 group-active:scale-95" width="40" height="40">
+      <span class="display leading-none">
+        <span class="block text-[.62rem] font-semibold uppercase tracking-[.34em] text-mist">The</span>
+        <span class="block text-[1.45rem] font-bold uppercase text-amber">Retail Truth</span>
+      </span>
+    </a>
+    <div class="hidden items-center gap-8 md:flex">
+      <a class="nav-link" href="#comics">Comics</a>
+      <a class="nav-link" href="#wall">Truth Wall</a>
+      <a class="nav-link" href="#scripts">Scripts</a>
+      <a class="nav-link" href="#about">About</a>
+    </div>
+    <div class="flex items-center gap-3">
+      <a href="#share" class="btn btn-primary hidden !py-3 !px-5 text-sm sm:inline-flex">Share your truth</a>
+      <button type="button" class="icon-btn !p-2.5 md:hidden" aria-label="Open menu" aria-expanded="false" aria-controls="mobile-menu" data-menu-btn>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg>
+      </button>
+    </div>
+  </nav>
+  <div id="mobile-menu" class="header-solid hidden px-4 pb-6 md:hidden" data-menu>
+    <div class="flex flex-col gap-1 pt-2">
+      <a class="nav-link py-3 text-lg" href="#comics">Comics</a>
+      <a class="nav-link py-3 text-lg" href="#wall">Truth Wall</a>
+      <a class="nav-link py-3 text-lg" href="#scripts">Scripts</a>
+      <a class="nav-link py-3 text-lg" href="#about">About</a>
+      <a href="#share" class="btn btn-primary mt-3">Share your truth</a>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ============ HERO ============ -->
+<section class="hero-bg relative isolate flex flex-col overflow-hidden pt-28 sm:pt-32 lg:min-h-[min(100svh,920px)]">
+  <div class="stripes absolute inset-y-0 right-0 -z-10 w-[38%]" aria-hidden="true"></div>
+  <div class="mx-auto grid w-full max-w-7xl flex-1 items-center gap-10 px-4 sm:px-6 lg:grid-cols-12 lg:gap-6 lg:px-8">
+    <div class="relative z-10 pb-2 lg:col-span-7 lg:pb-16">
+      <p class="eyebrow reveal">A community for retail workers</p>
+      <h1 class="reveal mt-5 text-[3.4rem] font-bold uppercase sm:text-7xl lg:text-[6.4rem]" style="transition-delay:.08s">
+        What your store <span class="amber-glow">won't tell you.</span>
+      </h1>
+      <div class="rule reveal mt-8" style="transition-delay:.14s"></div>
+      <p class="reveal mt-7 max-w-xl text-lg text-mist sm:text-xl" style="transition-delay:.2s">
+        Honest comics, real stories and practical scripts from people who've worked the till, the floor and the stockroom. Say how the job really feels — anonymously, and without judgement.
+      </p>
+      <div class="reveal mt-10 flex flex-col gap-3 sm:flex-row" style="transition-delay:.26s">
+        <a href="#share" class="btn btn-primary text-base">
+          Share how you feel
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+        </a>
+        <a href="#comics" class="btn btn-ghost text-base">Read the comics</a>
+      </div>
+      <ul class="reveal mt-10 flex flex-wrap gap-x-7 gap-y-3 text-sm text-muted" style="transition-delay:.32s">
+        <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Anonymous by default</li>
+        <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>Free, always</li>
+        <li class="flex items-center gap-2"><span class="h-1.5 w-1.5 rounded-full bg-amber"></span>New content every week</li>
+      </ul>
+    </div>
+    <div class="hero-figure lg:col-span-5" aria-hidden="true">
+      <div class="absolute left-1/2 top-[38%] -z-10 h-[120%] w-[120%] -translate-x-1/2 -translate-y-1/2 rounded-full" style="background: radial-gradient(closest-side, rgba(242,169,59,.28), rgba(242,169,59,.06) 60%, transparent)"></div>
+      <svg class="figure-glow mx-auto -mb-px block w-[78%] max-w-[300px] sm:max-w-[360px] lg:w-full lg:max-w-none" viewBox="14 18 100 104"><use href="#hooded" x="0" y="0" width="128" height="128"/></svg>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SOUND FAMILIAR ============ -->
+<section class="relative border-y border-white/5 bg-navy py-10" aria-labelledby="familiar-title">
+  <div class="mx-auto mb-6 flex max-w-7xl items-baseline justify-between gap-4 px-4 sm:px-6 lg:px-8">
+    <h2 id="familiar-title" class="text-2xl font-semibold uppercase sm:text-3xl">Sound familiar?</h2>
+    <p class="hidden text-sm text-muted sm:block">Lines every retail worker has heard.</p>
+  </div>
+  <div class="marquee overflow-hidden" aria-label="Things managers say">
+    <div class="marquee-track" data-marquee></div>
+  </div>
+</section>
+
+<!-- ============ COMICS ============ -->
+<section id="comics" class="section relative" aria-labelledby="comics-title">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col justify-between gap-6 md:flex-row md:items-end">
+      <div class="max-w-2xl">
+        <p class="eyebrow reveal">The comics</p>
+        <h2 id="comics-title" class="reveal mt-4 text-5xl font-bold uppercase sm:text-6xl">Funny because <span class="text-amber">it's true.</span></h2>
+        <p class="reveal mt-5 text-lg">Meet the Worker and the Manager. Three panels, one familiar shift. Tap a comic to read it full size and tell us if it's happened to you.</p>
+        <a href="https://www.facebook.com/RetailTrueth" target="_blank" rel="noopener" class="reveal mt-5 inline-flex items-center gap-2 rounded-lg font-semibold text-amber hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f2a93b]">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8V6.5c0-.8.2-1.3 1.4-1.3H17V2.2C16.2 2.1 15.4 2 14.5 2 12 2 10.5 3.5 10.5 6.2V8H8v3.4h2.5V22H14V11.4h2.7L17 8h-3z"/></svg>
+          New comic daily on Facebook
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+      <div class="reveal hidden gap-2 md:flex">
+        <button type="button" class="icon-btn !p-3" aria-label="Scroll comics left" data-scroll="-1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button type="button" class="icon-btn !p-3" aria-label="Scroll comics right" data-scroll="1"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <ul class="comic-scroller gutter mt-12 flex gap-5 overflow-x-auto pb-6" data-comics></ul>
+</section>
+
+<!-- ============ TRUTH WALL ============ -->
+<section id="wall" class="section relative bg-navy" aria-labelledby="wall-title">
+  <div class="pointer-events-none absolute inset-0" aria-hidden="true" style="background: radial-gradient(40% 40% at 10% 0%, rgba(242,169,59,.10), transparent 70%), radial-gradient(50% 50% at 100% 100%, rgba(30,44,92,.45), transparent 70%)"></div>
+  <div class="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">The Truth Wall</p>
+      <h2 id="wall-title" class="reveal mt-4 text-5xl font-bold uppercase sm:text-6xl">How does work <span class="text-amber">really</span> feel?</h2>
+      <p class="reveal mt-5 text-lg">Good shift or rough one, this is the place to say it. No names, no store names — just the truth, from people who get it.</p>
+    </div>
+
+    <div class="mt-14 grid gap-8 lg:grid-cols-12">
+      <!-- form -->
+      <div id="share" class="lg:col-span-5">
+        <form class="surface floating reveal rounded-3xl p-6 sm:p-8 lg:sticky lg:top-28" data-form novalidate>
+          <h3 class="text-3xl font-semibold uppercase">Share your truth</h3>
+          <p class="mt-2 text-sm text-muted">Takes 30 seconds. Anonymous unless you add a name.</p>
+
+          <fieldset class="mt-7">
+            <legend class="mb-3 text-sm font-semibold text-white">Right now, work makes me feel…</legend>
+            <div class="flex flex-wrap gap-2" data-mood-options></div>
+            <p class="mt-2 hidden text-sm text-amber" data-err="mood">Pick the feeling that fits best.</p>
+          </fieldset>
+
+          <div class="mt-6">
+            <label for="story" class="mb-2 block text-sm font-semibold text-white">What's on your mind?</label>
+            <textarea id="story" rows="5" maxlength="400" class="field resize-none" placeholder="e.g. Six hours, no break, and then 'can you stay till close?'" data-story></textarea>
+            <div class="mt-1 flex justify-between text-xs text-muted"><span class="hidden text-amber" data-err="story">Write at least a few words.</span><span class="ml-auto" data-count>0 / 400</span></div>
+          </div>
+
+          <div class="mt-5 grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="role" class="mb-2 block text-sm font-semibold text-white">Your role</label>
+              <select id="role" class="field" data-role>
+                <option>Cashier</option><option>Sales floor</option><option>Stockroom</option><option>Customer service</option><option>Supervisor</option><option>Former retail worker</option><option>Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="name" class="mb-2 block text-sm font-semibold text-white">Name <span class="font-normal text-muted">(optional)</span></label>
+              <input id="name" class="field" maxlength="24" placeholder="Anonymous" autocomplete="off" data-name>
+            </div>
+          </div>
+
+          <label class="mt-6 flex cursor-pointer items-start gap-3 text-sm">
+            <input type="checkbox" class="mt-1 h-4 w-4 shrink-0 accent-[#f2a93b]" data-agree>
+            <span>I haven't named real people or stores, and I'm keeping it respectful.</span>
+          </label>
+          <p class="mt-1 hidden text-sm text-amber" data-err="agree">Please confirm before posting.</p>
+
+          <button type="submit" class="btn btn-primary mt-7 w-full text-base">Post to the wall</button>
+        </form>
+      </div>
+
+      <!-- wall -->
+      <div class="lg:col-span-7">
+        <div class="surface reveal rounded-3xl p-6 sm:p-8">
+          <div class="flex items-baseline justify-between gap-4">
+            <h3 class="text-2xl font-semibold uppercase">Mood on the floor</h3>
+            <span class="text-sm text-muted" data-total></span>
+          </div>
+          <div class="mt-5 grid gap-3" data-meter></div>
+        </div>
+
+        <div class="reveal mt-8 flex flex-wrap gap-2" role="group" aria-label="Filter posts by feeling" data-filters></div>
+        <ul class="mt-6 grid gap-4" data-posts aria-live="polite"></ul>
+        <p class="mt-6 hidden text-center text-muted" data-empty>No posts with this feeling yet. Be the first.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SCRIPTS ============ -->
+<section id="scripts" class="section relative" aria-labelledby="scripts-title">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="max-w-2xl">
+      <p class="eyebrow reveal">Scripts that work</p>
+      <h2 id="scripts-title" class="reveal mt-4 text-5xl font-bold uppercase sm:text-6xl">Say it <span class="text-amber">calmly.</span> Say it once.</h2>
+      <p class="reveal mt-5 text-lg">The comics are jokes, but the comebacks are real. Short, polite lines you can actually use on your next shift.</p>
+    </div>
+    <div class="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-4" data-scripts></div>
+  </div>
+</section>
+
+<!-- ============ ABOUT / JOIN ============ -->
+<section id="about" class="section relative pt-0" aria-labelledby="about-title">
+  <div class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+    <div class="surface floating reveal relative isolate overflow-hidden rounded-[2rem] px-6 py-14 sm:px-12 lg:px-16 lg:py-20">
+      <div class="absolute inset-0 -z-10" aria-hidden="true" style="background: radial-gradient(45% 80% at 85% 50%, rgba(242,169,59,.22), transparent 70%), radial-gradient(50% 80% at 0% 0%, rgba(30,44,92,.6), transparent 70%), #0b1226"></div>
+      <div class="stripes absolute inset-y-0 right-0 -z-10 w-1/3" aria-hidden="true"></div>
+      <div class="grid items-center gap-12 lg:grid-cols-12">
+        <div class="lg:col-span-7">
+          <p class="eyebrow">About the community</p>
+          <h2 id="about-title" class="mt-4 text-5xl font-bold uppercase sm:text-6xl">You're not the only one <span class="amber-glow">who's tired.</span></h2>
+          <p class="mt-6 max-w-xl text-lg">The Retail Truth is for the people who keep stores running — the cashiers, stockers, floor staff and supervisors who hear "you're a team player, right?" more than "thank you." We laugh about it, we talk about it, and we share what actually helps.</p>
+          <div class="mt-9 flex flex-col gap-3 sm:flex-row">
+            <a href="https://www.facebook.com/RetailTrueth" target="_blank" rel="noopener" class="btn btn-primary text-base">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M14 8V6.5c0-.8.2-1.3 1.4-1.3H17V2.2C16.2 2.1 15.4 2 14.5 2 12 2 10.5 3.5 10.5 6.2V8H8v3.4h2.5V22H14V11.4h2.7L17 8h-3z"/></svg>
+              Follow @RetailTruth
+            </a>
+            <a href="#share" class="btn btn-ghost text-base">Post on the Truth Wall</a>
+          </div>
+        </div>
+        <ul class="grid gap-4 sm:grid-cols-3 lg:col-span-5 lg:grid-cols-1">
+          <li><a href="https://www.facebook.com/RetailTrueth" target="_blank" rel="noopener" class="group block rounded-2xl border border-white/10 bg-white/[.03] p-5 transition hover:border-[#f2a93b]/50 hover:bg-white/[.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f2a93b]"><p class="display flex items-center justify-between gap-3 text-2xl font-semibold uppercase text-white">Daily comics <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-amber transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></p><p class="mt-1 text-sm">A new Worker vs. Manager strip on Facebook every day around noon. <span class="text-amber">See them on Facebook</span></p></a></li>
+          <li><a href="https://www.youtube.com/@RetailTruth" target="_blank" rel="noopener" class="group block rounded-2xl border border-white/10 bg-white/[.03] p-5 transition hover:border-[#f2a93b]/50 hover:bg-white/[.06] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f2a93b]"><p class="display flex items-center justify-between gap-3 text-2xl font-semibold uppercase text-white">Weekly videos <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" class="text-amber transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" aria-hidden="true"><path d="M7 17L17 7M9 7h8v8"/></svg></p><p class="mt-1 text-sm">Short videos on the things nobody says out loud at work. <span class="text-amber">Watch on YouTube</span></p></a></li>
+          <li class="rounded-2xl border border-white/10 bg-white/[.03] p-5"><p class="display flex items-center justify-between gap-3 text-2xl font-semibold uppercase text-white">Real talk <span class="rounded-full border border-[#f2a93b]/40 bg-[#f2a93b]/10 px-2.5 py-0.5 font-sans text-[.65rem] font-semibold uppercase tracking-[.18em] text-amber">Coming soon</span></p><p class="mt-1 text-sm">A respectful space to vent, laugh and swap advice.</p></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="border-t border-white/5 bg-navy">
+  <div class="mx-auto flex max-w-7xl flex-col gap-8 px-4 py-12 sm:px-6 md:flex-row md:items-center md:justify-between lg:px-8">
+    <a href="#top" class="flex items-center gap-3 rounded-lg focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f2a93b]">
+      <img src="website-logo/logo-mark.svg" alt="" class="h-11 w-11" width="44" height="44">
+      <span class="display leading-none"><span class="block text-[.62rem] font-semibold uppercase tracking-[.34em] text-mist">The</span><span class="block text-2xl font-bold uppercase text-amber">Retail Truth</span></span>
+    </a>
+    <nav class="flex flex-wrap gap-x-7 gap-y-3" aria-label="Footer">
+      <a class="nav-link" href="#comics">Comics</a><a class="nav-link" href="#wall">Truth Wall</a><a class="nav-link" href="#scripts">Scripts</a><a class="nav-link" href="#about">About</a><a class="nav-link" href="https://www.facebook.com/RetailTrueth" target="_blank" rel="noopener">Facebook</a><a class="nav-link" href="https://www.youtube.com/@RetailTruth" target="_blank" rel="noopener">YouTube</a>
+    </nav>
+  </div>
+  <div class="mx-auto max-w-7xl border-t border-white/5 px-4 py-6 text-xs text-muted sm:px-6 lg:px-8">
+    <p>© <span data-year></span> The Retail Truth. Not affiliated with any retailer. Posts reflect the views of the people who wrote them.</p>
+  </div>
+</footer>
+
+<!-- comic viewer -->
+<dialog class="m-auto w-full p-4" data-dialog aria-labelledby="dlg-title">
+  <div class="dialog-panel surface floating mx-auto grid max-h-[92vh] max-w-5xl overflow-hidden rounded-3xl md:grid-cols-[minmax(0,1fr)_minmax(0,22rem)]">
+    <div class="overflow-y-auto bg-black/40 md:max-h-[92vh]"><img class="mx-auto block w-full max-w-[560px]" alt="" data-dlg-img></div>
+    <div class="flex flex-col gap-5 overflow-y-auto p-6 sm:p-8">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <p class="eyebrow !text-xs" data-dlg-num></p>
+          <h3 id="dlg-title" class="mt-2 text-4xl font-bold uppercase" data-dlg-title></h3>
+        </div>
+        <button type="button" class="icon-btn !p-2.5" aria-label="Close" data-close><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <p class="text-white" data-dlg-caption></p>
+      <div class="rounded-2xl border border-amber/30 bg-amber/[.06] p-4">
+        <p class="text-xs font-semibold uppercase tracking-[.2em] text-amber">The takeaway</p>
+        <p class="mt-1 text-sm text-mist" data-dlg-tip></p>
+      </div>
+      <div>
+        <p class="mb-3 text-sm font-semibold text-white" data-dlg-question></p>
+        <div class="flex flex-wrap gap-2" data-dlg-reactions></div>
+      </div>
+      <div class="mt-auto flex gap-2 pt-2">
+        <button type="button" class="btn btn-ghost flex-1 !py-3 text-sm" data-nav="-1">← Previous</button>
+        <button type="button" class="btn btn-ghost flex-1 !py-3 text-sm" data-nav="1">Next →</button>
+      </div>
+      <a href="#share" class="btn btn-primary !py-3 text-sm" data-close-link>Share your own story</a>
+    </div>
+  </div>
+</dialog>
+
+<div class="toast fixed bottom-6 left-1/2 z-[70] -translate-x-1/2" role="status" aria-live="polite" data-toast>
+  <div class="surface floating rounded-full px-5 py-3 text-sm font-medium text-white" data-toast-text></div>
+</div>
+
+<script>
+(() => {
+  const $ = (s, el = document) => el.querySelector(s);
+  const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+  const store = {
+    get(k, fallback) { try { const v = localStorage.getItem('rt:' + k); return v ? JSON.parse(v) : fallback; } catch { return fallback; } },
+    set(k, v) { try { localStorage.setItem('rt:' + k, JSON.stringify(v)); } catch {} }
+  };
+  const esc = s => s.replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  // ---------- content ----------
+  const COMICS = [
+    { title: 'Team Player', caption: '“You\'re a team player, right?” Team player = 3 jobs, 1 paycheck.', tip: 'Being helpful is great. Doing three jobs for one wage isn\'t teamwork — it\'s understaffing.', question: 'Has your manager ever used this line on you?' },
+    { title: "I'll Look Into It", caption: '“I\'ll look into it.” …3 weeks later.', tip: 'Follow up in writing with a date: “Any update on Fridays by the end of the week?”', question: 'Still waiting on an answer about something?' },
+    { title: 'Day Off', caption: 'Your day off is YOUR day off.', tip: '“I can\'t today. Thanks for thinking of me.” No excuse needed.', question: 'Would you have picked up the phone?' },
+    { title: 'The Break', caption: '6 hours, no break… then this.', tip: 'Don\'t ask IF you can take your break. Ask WHEN: “2:00 or 2:30?”', question: 'What\'s the longest you\'ve gone without a break?' },
+    { title: 'Employee Of The Month', caption: 'Congrats, you\'re Employee of the Month! Your prize: a piece of paper.', tip: 'Recognition is nice. Ask what it means for your next review or pay rise.', question: 'What did you get for going above and beyond?' },
+    { title: 'Step Up', caption: '“Let\'s not make this about money.” …it\'s a job. It\'s literally about money.', tip: 'Extra responsibility is a fair time to ask: “What does the pay look like for that?”', question: 'Heard this before the holiday rush?' },
+    { title: 'Stay Late', caption: '“Can you stay till close?” at 5:58 PM.', tip: 'Turn the question around. If someone else can solve your problem, someone else can close.', question: 'Has this ever happened to you?' }
+  ];
+  const REACTIONS = [ { id: 'been', label: 'Been there', icon: '🙋' }, { id: 'lol', label: 'Too real', icon: '😂' }, { id: 'today', label: 'Happened today', icon: '😤' } ];
+  const QUOTES = ["You're a team player, right?", "I'll look into it.", "Can you stay till close?", "Let's not make this about money.", "I know it's your day off, but…", "Later. We're slammed.", "We're one big family!", "It comes with a certificate.", "We need everyone to step up."];
+  const MOODS = [
+    { id: 'exhausted', label: 'Exhausted', icon: '😩', color: '#f2a93b' },
+    { id: 'frustrated', label: 'Frustrated', icon: '😤', color: '#e8774a' },
+    { id: 'undervalued', label: 'Undervalued', icon: '😔', color: '#9b8cf0' },
+    { id: 'laughing', label: 'Laughing it off', icon: '😂', color: '#5fc4c9' },
+    { id: 'proud', label: 'Proud', icon: '💪', color: '#7fcf8a' },
+    { id: 'hopeful', label: 'Hopeful', icon: '🌱', color: '#c9cfe0' }
+  ];
+  const moodById = Object.fromEntries(MOODS.map(m => [m.id, m]));
+  const SCRIPTS = [
+    { when: 'They call on your day off', say: '“I can\'t today. Thanks for thinking of me.”', why: 'No excuse, no guilt, no 20-minute story.' },
+    { when: 'Your break is overdue', say: '“What time can I take my break — 2:00 or 2:30?”', why: 'Ask when, not if. A choice is easier to say yes to.' },
+    { when: 'They ask you to stay late', say: '“I have plans at 6. Can someone else close tonight?”', why: 'Turn the question around, politely.' },
+    { when: 'More work, same pay', say: '“Happy to step up. What does the pay look like for that?”', why: 'It\'s a job. It\'s fine to talk about money.' }
+  ];
+  // Example posts so the wall isn't empty on first visit — clearly labelled on the page.
+  const EXAMPLES = [
+    { id: 'ex1', mood: 'exhausted', text: 'Closed last night, opening this morning. The "clopen" is not a personality trait.', role: 'Cashier', name: '', ts: Date.now() - 1000 * 60 * 42, example: true },
+    { id: 'ex2', mood: 'proud', text: 'A customer came back just to tell my supervisor I helped her find the right gift. Small win, but I\'m keeping it.', role: 'Sales floor', name: '', ts: Date.now() - 1000 * 60 * 60 * 3, example: true },
+    { id: 'ex3', mood: 'undervalued', text: 'Trained three new starters this month. Still on the same rate as when I started.', role: 'Stockroom', name: '', ts: Date.now() - 1000 * 60 * 60 * 9, example: true },
+    { id: 'ex4', mood: 'laughing', text: '"Do you work here?" — asked while I was wearing the uniform, the lanyard AND holding the price gun.', role: 'Sales floor', name: '', ts: Date.now() - 1000 * 60 * 60 * 26, example: true },
+    { id: 'ex5', mood: 'hopeful', text: 'Used the "2:00 or 2:30?" line today. Got my break at 2:00. It actually works.', role: 'Customer service', name: '', ts: Date.now() - 1000 * 60 * 60 * 50, example: true }
+  ];
+
+  // ---------- marquee ----------
+  const pills = QUOTES.map(q => `<span class="quote-pill"><span>“</span>${esc(q)}<span>”</span></span>`).join('');
+  $('[data-marquee]').innerHTML = pills + pills.replace(/class="quote-pill"/g, 'class="quote-pill" aria-hidden="true"');
+
+  // ---------- comics ----------
+  const reacted = store.get('reactions', {});
+  const comicSrc = i => `assets/comics/comic-${String(i + 1).padStart(2, '0')}.jpg`;
+  $('[data-comics]').innerHTML = COMICS.map((c, i) => `
+    <li class="w-[78vw] shrink-0 sm:w-[340px] lg:w-[300px]">
+      <button type="button" class="card-btn" data-open="${i}" aria-label="Read comic ${i + 1}: ${esc(c.title)}">
+        <article class="comic-card surface overflow-hidden rounded-[20px]">
+          <div class="relative aspect-[2/3] overflow-hidden bg-deep">
+            <img src="${comicSrc(i)}" alt="" loading="lazy" width="1000" height="1500" class="comic-img h-full w-full object-cover object-top">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+            <div class="absolute inset-0 mix-blend-multiply" style="background: linear-gradient(180deg, transparent 55%, rgba(11,18,38,.55))"></div>
+            <span class="absolute left-4 top-4 rounded-full bg-black/60 px-3 py-1 text-xs font-semibold tracking-[.18em] text-amber backdrop-blur">#${String(i + 1).padStart(2, '0')}</span>
+          </div>
+          <div class="flex items-center justify-between gap-3 p-5">
+            <div>
+              <h3 class="text-2xl font-semibold uppercase">${esc(c.title)}</h3>
+              <p class="mt-1 text-sm text-muted" data-card-reaction="${i}"></p>
+            </div>
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-white/10 text-amber" aria-hidden="true">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+            </span>
+          </div>
+        </article>
+      </button>
+    </li>`).join('');
+
+  const updateCardReaction = i => {
+    const r = REACTIONS.find(r => r.id === reacted[i]);
+    $(`[data-card-reaction="${i}"]`).textContent = r ? `${r.icon} You said: ${r.label}` : 'Read the comic →';
+  };
+  COMICS.forEach((_, i) => updateCardReaction(i));
+
+  const scroller = $('[data-comics]');
+  $$('[data-scroll]').forEach(b => b.addEventListener('click', () => scroller.scrollBy({ left: +b.dataset.scroll * 640, behavior: 'smooth' })));
+
+  const dlg = $('[data-dialog]');
+  let current = 0;
+  const renderDialog = i => {
+    current = (i + COMICS.length) % COMICS.length;
+    const c = COMICS[current];
+    $('[data-dlg-img]').src = comicSrc(current);
+    $('[data-dlg-img]').alt = `Comic ${current + 1}: ${c.title}`;
+    $('[data-dlg-num]').textContent = `Comic ${current + 1} of ${COMICS.length}`;
+    $('[data-dlg-title]').textContent = c.title;
+    $('[data-dlg-caption]').textContent = c.caption;
+    $('[data-dlg-tip]').textContent = c.tip;
+    $('[data-dlg-question]').textContent = c.question;
+    $('[data-dlg-reactions]').innerHTML = REACTIONS.map(r => `<button type="button" class="chip" aria-pressed="${reacted[current] === r.id}" data-react="${r.id}"><span aria-hidden="true">${r.icon}</span>${r.label}</button>`).join('');
+  };
+  scroller.addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (b) { renderDialog(+b.dataset.open); dlg.showModal(); } });
+  $('[data-dlg-reactions]').addEventListener('click', e => {
+    const b = e.target.closest('[data-react]'); if (!b) return;
+    reacted[current] = reacted[current] === b.dataset.react ? undefined : b.dataset.react;
+    store.set('reactions', reacted); renderDialog(current); updateCardReaction(current);
+    if (reacted[current]) toast('Thanks — you\'re not alone in this.');
+  });
+  $$('[data-nav]').forEach(b => b.addEventListener('click', () => renderDialog(current + +b.dataset.nav)));
+  $('[data-close]').addEventListener('click', () => dlg.close());
+  $('[data-close-link]').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', e => { if (e.target === dlg) dlg.close(); });
+  dlg.addEventListener('keydown', e => { if (e.key === 'ArrowRight') renderDialog(current + 1); if (e.key === 'ArrowLeft') renderDialog(current - 1); });
+
+  // ---------- scripts ----------
+  $('[data-scripts]').innerHTML = SCRIPTS.map((s, i) => `
+    <article class="surface reveal flex flex-col rounded-3xl p-6" style="transition-delay:${i * .07}s">
+      <p class="text-xs font-semibold uppercase tracking-[.2em] text-muted">When</p>
+      <h3 class="mt-1 text-2xl font-semibold uppercase">${esc(s.when)}</h3>
+      <p class="mt-5 flex-1 font-display text-[1.6rem] font-semibold leading-tight text-amber">${esc(s.say)}</p>
+      <p class="mt-5 border-t border-white/10 pt-4 text-sm">${esc(s.why)}</p>
+    </article>`).join('');
+
+  // ---------- truth wall ----------
+  let posts = store.get('posts', []);
+  const meToo = store.get('metoo', {});
+  let filter = 'all';
+  const allPosts = () => [...posts, ...EXAMPLES].sort((a, b) => b.ts - a.ts);
+
+  const ago = ts => {
+    const m = Math.round((Date.now() - ts) / 60000);
+    if (m < 1) return 'just now'; if (m < 60) return `${m}m ago`;
+    const h = Math.round(m / 60); if (h < 24) return `${h}h ago`;
+    return `${Math.round(h / 24)}d ago`;
+  };
+
+  $('[data-mood-options]').innerHTML = MOODS.map(m => `
+    <label class="relative">
+      <input type="radio" name="mood" value="${m.id}" class="mood-input peer absolute opacity-0">
+      <span class="chip"><span aria-hidden="true">${m.icon}</span>${m.label}</span>
+    </label>`).join('');
+
+  const renderFilters = () => {
+    $('[data-filters]').innerHTML = [{ id: 'all', label: 'All feelings', icon: '' }, ...MOODS].map(m =>
+      `<button type="button" class="chip" aria-pressed="${filter === m.id}" data-filter="${m.id}">${m.icon ? `<span aria-hidden="true">${m.icon}</span>` : ''}${m.label}</button>`).join('');
+  };
+
+  const renderMeter = () => {
+    const list = allPosts();
+    const counts = Object.fromEntries(MOODS.map(m => [m.id, 0]));
+    list.forEach(p => counts[p.mood]++);
+    const max = Math.max(1, ...Object.values(counts));
+    $('[data-total]').textContent = `${list.length} ${list.length === 1 ? 'post' : 'posts'}`;
+    $('[data-meter]').innerHTML = MOODS.map(m => `
+      <div class="grid grid-cols-[8.5rem_1fr_2rem] items-center gap-3 text-sm sm:grid-cols-[10rem_1fr_2rem]">
+        <span class="truncate"><span aria-hidden="true">${m.icon}</span> ${m.label}</span>
+        <span class="h-2.5 overflow-hidden rounded-full bg-white/5"><span class="bar-fill block h-full rounded-full" style="background:${m.color};transform:scaleX(${counts[m.id] / max})"></span></span>
+        <span class="text-right font-semibold text-white">${counts[m.id]}</span>
+      </div>`).join('');
+  };
+
+  const renderPosts = (newId) => {
+    const list = allPosts().filter(p => filter === 'all' || p.mood === filter);
+    $('[data-empty]').classList.toggle('hidden', list.length > 0);
+    $('[data-posts]').innerHTML = list.map(p => {
+      const m = moodById[p.mood];
+      const count = (p.metoo || 0) + (meToo[p.id] ? 1 : 0);
+      return `
+      <li class="surface rounded-2xl p-5 sm:p-6 ${p.id === newId ? 'post-enter' : ''}" style="border-left: 3px solid ${m.color}">
+        <div class="flex flex-wrap items-center justify-between gap-2 text-sm">
+          <span class="inline-flex items-center gap-2 font-semibold text-white"><span aria-hidden="true">${m.icon}</span>${m.label}</span>
+          <span class="flex items-center gap-2 text-muted">${p.example ? '<span class="rounded-full border border-white/10 px-2 py-0.5 text-[.7rem] uppercase tracking-wider">Example</span>' : ''}${ago(p.ts)}</span>
+        </div>
+        <p class="mt-3 text-[1.05rem] text-white">${esc(p.text)}</p>
+        <div class="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm text-muted">
+          <span>${esc(p.name || 'Anonymous')} · ${esc(p.role)}</span>
+          <button type="button" class="icon-btn" aria-pressed="${!!meToo[p.id]}" data-metoo="${p.id}">🤝 Same here${count ? ` · ${count}` : ''}</button>
+        </div>
+      </li>`;
+    }).join('');
+  };
+
+  const renderWall = newId => { renderFilters(); renderMeter(); renderPosts(newId); };
+  renderWall();
+
+  $('[data-filters]').addEventListener('click', e => { const b = e.target.closest('[data-filter]'); if (!b) return; filter = b.dataset.filter; renderFilters(); renderPosts(); });
+  $('[data-posts]').addEventListener('click', e => {
+    const b = e.target.closest('[data-metoo]'); if (!b) return;
+    meToo[b.dataset.metoo] = !meToo[b.dataset.metoo]; store.set('metoo', meToo); renderPosts();
+  });
+
+  const story = $('[data-story]');
+  story.addEventListener('input', () => { $('[data-count]').textContent = `${story.value.length} / 400`; });
+
+  $('[data-form]').addEventListener('submit', e => {
+    e.preventDefault();
+    const mood = $('input[name="mood"]:checked')?.value;
+    const text = story.value.trim();
+    const agree = $('[data-agree]').checked;
+    const errs = { mood: !mood, story: text.length < 5, agree: !agree };
+    Object.entries(errs).forEach(([k, bad]) => $(`[data-err="${k}"]`).classList.toggle('hidden', !bad));
+    if (Object.values(errs).some(Boolean)) return;
+    const post = { id: 'p' + Date.now(), mood, text, role: $('[data-role]').value, name: $('[data-name]').value.trim(), ts: Date.now() };
+    posts = [post, ...posts]; store.set('posts', posts);
+    e.target.reset(); $('[data-count]').textContent = '0 / 400';
+    filter = 'all'; renderWall(post.id);
+    toast('Posted. Thanks for telling the truth.');
+    if (matchMedia('(max-width: 1023px)').matches) $('[data-posts]').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  // ---------- chrome ----------
+  let toastTimer;
+  function toast(msg) {
+    const t = $('[data-toast]'); $('[data-toast-text]').textContent = msg; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  const header = $('[data-header]');
+  const onScroll = () => header.classList.toggle('header-solid', scrollY > 24);
+  addEventListener('scroll', onScroll, { passive: true }); onScroll();
+
+  const menuBtn = $('[data-menu-btn]'), menu = $('[data-menu]');
+  menuBtn.addEventListener('click', () => { const open = menu.classList.toggle('hidden') === false; menuBtn.setAttribute('aria-expanded', open); header.classList.add('header-solid'); });
+  $$('a', menu).forEach(a => a.addEventListener('click', () => { menu.classList.add('hidden'); menuBtn.setAttribute('aria-expanded', false); }));
+
+
+  $('[data-year]').textContent = new Date().getFullYear();
+
+  const io = new IntersectionObserver(entries => entries.forEach(en => { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } }), { threshold: .12 });
+  $$('.reveal').forEach(el => io.observe(el));
+})();
+</script>
+</body>
+</html>
